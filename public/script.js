@@ -19,12 +19,14 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 
 document.body.appendChild( renderer.domElement );
 var trackBallControls = new THREE.TrackballControls( camera, renderer.domElement );
-var chromaScale =  chroma.scale(['#2FA4B5', '#2FA4B5', '#703A5E']).domain([0, 255]);
+
+var chromaScale =  chroma.scale([ '#5BC0CF','#7F2C7B', '#497784']).domain([0, 255]);
+// var chromaScale =  chroma.scale(['#2FA4B5', '#2FA4B5', '#703A5E']).domain([0, 255]);
 // var chromaScale =  chroma.scale(['#D1412C', '#F4774A']).domain([0, 255]);
 
 // variables
-var planeWidth = 800 * 10;
-var planeHeight = 1600 * 10;
+var planeWidth = 800 * 20;
+var planeHeight = 1600 * 20;
 var planeWidthSegments = 799;  // -1 is very important
 var planeHeightSegments = 1599;
 
@@ -48,14 +50,14 @@ var planeTerrainMesh = new THREE.Mesh( planeTerrainGeometry, planeTerrainMateria
 var planeWireframeMaterial = new THREE.LineBasicMaterial( {color: 0x703A5E, transparent: true, opacity: 0.2  });
 var planeWireframeMesh = new THREE.LineSegments( planeTerrainGeometry, planeWireframeMaterial );
 
-planeWireframeMesh.translateY(20);
+planeWireframeMesh.translateY(10);
 // start
 init();
 animate();
 
 // threejs init function
 function init(){
-    camera.position.set(0,200,600);
+    camera.position.set(0,400,1200);
     trackBallControls.rotateSpeed = 4;
     trackBallControls.zoomSpeed = 1;
     scene.fog = distantFog;
@@ -123,51 +125,31 @@ function createGeometryFromMap() {
             vertices[i] = meshData[j];
         }
 
-        var count = planeTerrainGeometry.attributes.position.count;
-        planeTerrainGeometry.addAttribute( 'color', new THREE.BufferAttribute( new Float32Array( count * 3 ), 3 ) );
-        var color = new THREE.Color();
-        var positions1 = planeTerrainGeometry.attributes.position;
-        var colors1 = planeTerrainGeometry.attributes.color;
-
-        for ( var i = 0; i < count; i ++ ) {
-            color.set(chromaScale(positions1.getY( i )).hex());
-            // color.setHSL( 0.55 , ( 1 - positions1.getY( i ) / 255 ) , 0.7 );
-            colors1.setXYZ( i, color.r, color.g, color.b );
-        }
-        // console.log(chromaScale(100).hex());
-        // console.log(color.set(chromaScale(100).hex()));
-
+       
         planeTerrainGeometry.attributes.position.needsUpdate = true;
-        planeTerrainGeometry.attributes.color.needsUpdate = true;
-
         planeTerrainGeometry.computeVertexNormals();
         planeTerrainGeometry.computeFaceNormals();
         
         planeTerrainMesh.name = 'Terrain';
+        
+        createTerrainColors();
     };
 }
 
 
-// console.log(pixel,planeTerrainMesh);
+function createTerrainColors() {
+    var count = planeTerrainGeometry.attributes.position.count;
+    planeTerrainGeometry.addAttribute( 'color', new THREE.BufferAttribute( new Float32Array( count * 3 ), 3 ) );
+    var color = new THREE.Color();
+    var positions1 = planeTerrainGeometry.attributes.position;
+    var colors1 = planeTerrainGeometry.attributes.color;
 
-// var geometry1 = new THREE.PlaneBufferGeometry( 100, 100, 100, 100 );
-// var count = geometry1.attributes.position.count;
-// geometry1.addAttribute( 'color', new THREE.BufferAttribute( new Float32Array( count * 3 ), 3 ) );
-// var color = new THREE.Color();
-// var positions1 = geometry1.attributes.position;
-// var colors1 = geometry1.attributes.color;
-
-// for ( var i = 0; i < count; i ++ ) {
-//     color.setHSL( ( positions1.getY( i ) / 100 ) , 1.0, 0.5 );
-//     colors1.setXYZ( i, color.r, color.g, color.b );
-// }
-
-// var material = new THREE.MeshPhongMaterial( {
-//     color: 0xffffff,
-//     flatShading: true,
-//     vertexColors: THREE.VertexColors,
-//     shininess: 0,
-//     wireframe: true,
-// } );
-// var mesh = new THREE.Mesh( geometry1, material  );
-// scene.add( mesh );
+    for ( var i = 0; i < count; i ++ ) {
+        color.set(chromaScale(positions1.getY( i )).hex());
+        // color.setHSL( 0.55 , ( 1 - positions1.getY( i ) / 255 ) , 0.7 );
+        colors1.setXYZ( i, color.r, color.g, color.b );
+    }
+    // console.log(chromaScale(100).hex());
+    // console.log(color.set(chromaScale(100).hex()));
+    planeTerrainGeometry.attributes.color.needsUpdate = true;
+}
