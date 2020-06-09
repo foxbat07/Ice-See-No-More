@@ -20,7 +20,7 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 var trackBallControls = new THREE.TrackballControls( camera, renderer.domElement );
 
-var chromaScale =  chroma.scale([ '#5BC0CF','#7F2C7B', '#497784']).domain([0, 255]);
+var chromaScale =  chroma.scale([ '#F1B02E' , '#3BAAB6']).domain([0, 255]);
 // var chromaScale =  chroma.scale(['#2FA4B5', '#2FA4B5', '#703A5E']).domain([0, 255]);
 // var chromaScale =  chroma.scale(['#D1412C', '#F4774A']).domain([0, 255]);
 
@@ -47,7 +47,7 @@ position.usage = THREE.DynamicDrawUsage;
 var planeTerrainMesh = new THREE.Mesh( planeTerrainGeometry, planeTerrainMaterial );
 
 
-var planeWireframeMaterial = new THREE.LineBasicMaterial( {color: 0x703A5E, transparent: true, opacity: 0.2  });
+var planeWireframeMaterial = new THREE.LineBasicMaterial( {color: 0xDEE2D6, transparent: true, opacity: 0.2  });
 var planeWireframeMesh = new THREE.LineSegments( planeTerrainGeometry, planeWireframeMaterial );
 
 planeWireframeMesh.translateY(10);
